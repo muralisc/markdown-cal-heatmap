@@ -35,10 +35,15 @@
 
         cal.paint({
             itemSelector: '#obsidian-log-' + index,
-            domain: { type: 'month' , gutter: -10},
+            domain: { type: 'month' },
             subDomain: { type: 'day', width: 20, height: 20 , radius: 6},
             range: 12,
-            date: { start: start_date, highlight: [ new Date()], max: new Date() },
+            date: { 
+                start: start_date, 
+                highlight: [ new Date()], 
+                max: new Date(),
+                locale: { weekStart: 1 }
+            },
             data: {
                 source: data_row['data'],
                 x: 'date',

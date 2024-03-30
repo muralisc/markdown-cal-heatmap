@@ -14,7 +14,12 @@ import express from 'express'
 
 var argv = minimist(process.argv.slice(2));
 var filenames = argv['_'];
-var text = fs.readFileSync(filenames[0]).toString('utf-8');
+
+function getRandomIntInclusive(min, max) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+}
 
 function getListOfTextAtRoot(ast_as_ref) {
     let ast_of_lists = ast_as_ref.children.map((item) => {
@@ -28,27 +33,32 @@ function getListOfTextAtRoot(ast_as_ref) {
     });;
 
     let firstListIndex = 0;
-    let listOfDates = ast_of_lists[firstListIndex].children.map((item) => {
-        return DateTime.fromFormat(item.children[0].children[0].value,
-            'y-LL-dd ccc' /* https://moment.github.io/luxon/#/formatting */
-        );
+    let listOfDateString = ast_of_lists[firstListIndex].children.map((item) => {
+        try {
+            let listString = item.children[0].children[0].value;
+            let date_value_pair = listString.split(' - ')
+            let dateSring = date_value_pair[0]
+            let valueSring = date_value_pair.length > 1 ? date_value_pair[1] : 1; // getRandomIntInclusive(1,100)
+            let valueNumber = Number(valueSring);
+            // console.log(dateSring, valueNumber);
+            let dateObj = DateTime.fromFormat(dateSring,
+                'y-LL-dd ccc' /* https://moment.github.io/luxon/#/formatting */
+            );
+            return {
+                date: dateObj.toFormat('y-LL-dd'), 
+                value: valueNumber
+            };
+        } catch(e) {
+            console.log("At least two members are required for the list to be noted as list in AST")
+            throw e
+        }
     });
 
-
-    let listOfDateString = listOfDates.map((item) => {
-        return {
-            date: item.toFormat('y-LL-dd'),
-            value: 1
-        };
-    });
     return listOfDateString;
 }
 
-const abstract_syntax_tree = unified()
-    .use(remarkParse)
-    .parse(text)
-
 let alldata = filenames.map((filename) => {
+    console.log(`Processing file ${filename}`)
     var text = fs.readFileSync(filename).toString('utf-8');
     const abstract_syntax_tree = unified()
         .use(remarkParse)
@@ -59,16 +69,12 @@ let alldata = filenames.map((filename) => {
     }
     return retval;
 });
-console.log(alldata)
+// console.log(alldata)
 
 
 // Finally start the app !!
 const app = express()
 const port = 3000
-app.get('/dates', (req, res) => {
-    res.send(getListOfTextAtRoot(abstract_syntax_tree))
-})
-
 app.get('/all_files', (req, res) => {
     res.send(alldata)
 })
