@@ -8,25 +8,35 @@
 <!-- insall library -->
 <script src="https://unpkg.com/cal-heatmap/dist/cal-heatmap.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/cal-heatmap/dist/cal-heatmap.css">
+
+<!-- tooltip -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/cal-heatmap/dist/plugins/Tooltip.min.js"></script>
+<!-- legend -->
+<script src="https://unpkg.com/cal-heatmap/dist/plugins/Legend.min.js"></script>
+
 </head>
 
 <body>
 
 <h1>Obsidian </h1>
-<div id="example-sort"></div>
+<div id="example-sort">List of cal heatmaps from input text files</div>
 </body>
 
 <script type="text/javascript">
 
+
+    // First create as many divs as the number of elements in /data
+    let length_of_data = 2;
+    for (let i = 0 ; i < length_of_data; i++) {
+        var elemDiv = document.createElement('div');
+        elemDiv.setAttribute("id", "obsidian-log-" + i);
+        elemDiv.insertAdjacentText("afterbegin", i);
+        document.body.appendChild(elemDiv);
+    }
+
     // Help : https://cal-heatmap.com/docs/getting-started/installation
-
     const cal = new CalHeatmap();
-
-    const custom_data = [
-        { date: '2024-03-21', value: 13 },
-        { date: '2024-03-22', value: 26 },
-    ];
-
 
     var days_to_subtract = 330;
     var d = new Date();
@@ -34,10 +44,10 @@
 
 
     cal.paint({
-        itemSelector: '#example-sort',
-        domain: { type: 'month' },
-        subDomain: { type: 'day', width: 20, height: 20 },
-        range: 12,
+        itemSelector: '#obsidian-log-0',
+        domain: { type: 'year' },
+        subDomain: { type: 'day', width: 20, height: 20 , radius: 6},
+        range: 2,
         date: { start: d, highlight: [ new Date()], max: new Date() },
         data: {
             source: '/dates',
@@ -46,13 +56,32 @@
         },
         scale: {
             color: {
-                scheme: "rainbow",
+                scheme: "turbo",
                 // range: ['yellow', 'red'],
                 // interpolate: 'hsl',
                 type: 'linear',
-                domain: [0, 30],
+                domain: [0, 100],
             },
         },
-    });
+    },[
+    [
+      Tooltip,
+      {
+        text: function (date, value, dayjsDate) {
+          return (
+            (value ? value + '°C' : 'No data') + ' on ' + dayjsDate.format('LL')
+          );
+        },
+      },
+    ],
+    [
+      Legend,
+      {
+        tickSize: 0,
+        width: 150,
+        label: 'Seattle max temperature °C',
+      },
+    ]
+  ]);
 </script>
 

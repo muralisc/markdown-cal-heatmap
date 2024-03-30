@@ -8,6 +8,13 @@
 <!-- insall library -->
 <script src="https://unpkg.com/cal-heatmap/dist/cal-heatmap.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/cal-heatmap/dist/cal-heatmap.css">
+
+<!-- tooltip -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/cal-heatmap/dist/plugins/Tooltip.min.js"></script>
+<!-- legend -->
+<script src="https://unpkg.com/cal-heatmap/dist/plugins/Legend.min.js"></script>
+
 </head>
 
 <body>
@@ -18,15 +25,20 @@
 
 <script type="text/javascript">
 
-    // Help : https://cal-heatmap.com/docs/getting-started/installation
-
-    const cal = new CalHeatmap();
-
     const custom_data = [
-        { date: '2024-03-21', value: 13 },
-        { date: '2024-03-22', value: 26 },
+        { date: '2023-03-21', value: 13 },
+        { date: '2023-03-22', value: 26 },
     ];
 
+    for(let days = 1; days <= 100; days++) {
+        var d = new Date();
+        d.setDate(d.getDate() - days);
+        var datestring = d.getFullYear()+ "-" +(d.getMonth()+1)+ "-" +d.getDate();
+        custom_data.push({ date: datestring, value: days})
+    }
+
+    // Help : https://cal-heatmap.com/docs/getting-started/installation
+    const cal = new CalHeatmap();
 
     var days_to_subtract = 330;
     var d = new Date();
@@ -46,12 +58,32 @@
         },
         scale: {
             color: {
-                range: ['yellow', 'red'],
-                interpolate: 'hsl',
+                scheme: "turbo",
+                // range: ['yellow', 'red'],
+                // interpolate: 'hsl',
                 type: 'linear',
-                domain: [0, 30],
+                domain: [0, 100],
             },
         },
-    });
+    },[
+    [
+      Tooltip,
+      {
+        text: function (date, value, dayjsDate) {
+          return (
+            (value ? value + '°C' : 'No data') + ' on ' + dayjsDate.format('LL')
+          );
+        },
+      },
+    ],
+    [
+      Legend,
+      {
+        tickSize: 0,
+        width: 150,
+        label: 'Seattle max temperature °C',
+      },
+    ]
+  ]);
 </script>
 
