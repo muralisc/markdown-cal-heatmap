@@ -3,10 +3,10 @@
 Create cal-heatmap from markdown logs.
 
 markdown
-![example-markdown.jpeg]
+![markdown](example-markdown.jpeg)
 
 heatmap
-![example-heatmap.jpeg]
+![heatmap](example-heatmap.jpeg)
 
 ```
 npm init -y
