@@ -20,70 +20,76 @@
 <body>
 
 <h1>Obsidian </h1>
-<div id="example-sort"></div>
+<div id="obsidian-log-0"></div>
 </body>
 
 <script type="text/javascript">
+
+    function renderCal(data_row, index) {
+        // Help : https://cal-heatmap.com/docs/getting-started/installation
+        const cal = new CalHeatmap();
+        var days_to_subtract = 330;
+        var start_date = new Date();
+        start_date.setDate(start_date.getDate() - days_to_subtract);
+
+
+        cal.paint({
+            itemSelector: '#obsidian-log-' + index,
+            domain: { type: 'month' , gutter: -10},
+            subDomain: { type: 'day', width: 20, height: 20 , radius: 6},
+            range: 12,
+            date: { start: start_date, highlight: [ new Date()], max: new Date() },
+            data: {
+                source: data_row['data'],
+                x: 'date',
+                y: 'value',
+            },
+            scale: {
+                color: {
+                    scheme: "turbo",
+                    // range: ['yellow', 'red'],
+                    // interpolate: 'hsl',
+                    type: 'linear',
+                    domain: [0, 100],
+                },
+            },
+        },[
+            [
+                Tooltip,
+                {
+                    text: function (date, value, dayjsDate) {
+                        return (
+                            (value ? value + '°C' : 'No data') + ' on ' + dayjsDate.format('LL')
+                        );
+                    },
+                },
+            ],
+            [
+                Legend,
+                {
+                    tickSize: 0,
+                    width: 150,
+                    label: 'Seattle max temperature °C',
+                },
+            ]
+        ]);
+    }
 
     const custom_data = [
         { date: '2023-03-21', value: 13 },
         { date: '2023-03-22', value: 26 },
     ];
-
     for(let days = 1; days <= 100; days++) {
         var d = new Date();
         d.setDate(d.getDate() - days);
         var datestring = d.getFullYear()+ "-" +(d.getMonth()+1)+ "-" +d.getDate();
         custom_data.push({ date: datestring, value: days})
     }
+    let all_files = {
+        'filename': 'TestFilename.md',
+        'data': custom_data
+    }
 
-    // Help : https://cal-heatmap.com/docs/getting-started/installation
-    const cal = new CalHeatmap();
-
-    var days_to_subtract = 330;
-    var d = new Date();
-    d.setDate(d.getDate() - days_to_subtract);
-
-
-    cal.paint({
-        itemSelector: '#example-sort',
-        domain: { type: 'month' },
-        subDomain: { type: 'day', width: 20, height: 20 },
-        range: 12,
-        date: { start: d, highlight: [ new Date()], max: new Date() },
-        data: {
-            source: custom_data,
-            x: 'date',
-            y: 'value',
-        },
-        scale: {
-            color: {
-                scheme: "turbo",
-                // range: ['yellow', 'red'],
-                // interpolate: 'hsl',
-                type: 'linear',
-                domain: [0, 100],
-            },
-        },
-    },[
-    [
-      Tooltip,
-      {
-        text: function (date, value, dayjsDate) {
-          return (
-            (value ? value + '°C' : 'No data') + ' on ' + dayjsDate.format('LL')
-          );
-        },
-      },
-    ],
-    [
-      Legend,
-      {
-        tickSize: 0,
-        width: 150,
-        label: 'Seattle max temperature °C',
-      },
-    ]
-  ]);
+    renderCal(all_files, 0);
 </script>
 

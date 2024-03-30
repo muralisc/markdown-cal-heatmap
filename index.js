@@ -41,8 +41,6 @@ function getListOfTextAtRoot(ast_as_ref) {
             value: 1
         };
     });
-
-    console.log(listOfDateString)
     return listOfDateString;
 }
 
@@ -50,6 +48,18 @@ const abstract_syntax_tree = unified()
     .use(remarkParse)
     .parse(text)
 
+let alldata = filenames.map((filename) => {
+    var text = fs.readFileSync(filename).toString('utf-8');
+    const abstract_syntax_tree = unified()
+        .use(remarkParse)
+        .parse(text);
+    let retval = {
+        "filename": filename,
+        "data": getListOfTextAtRoot(abstract_syntax_tree)
+    }
+    return retval;
+});
+console.log(alldata)
 
 
 // Finally start the app !!
@@ -57,6 +67,10 @@ const app = express()
 const port = 3000
 app.get('/dates', (req, res) => {
     res.send(getListOfTextAtRoot(abstract_syntax_tree))
+})
+
+app.get('/all_files', (req, res) => {
+    res.send(alldata)
 })
 
 app.get('/', (req, res) => {

@@ -25,63 +25,72 @@
 
 <script type="text/javascript">
 
+    function renderCal(data_row, index) {
+        // Help : https://cal-heatmap.com/docs/getting-started/installation
+        const cal = new CalHeatmap();
+        var days_to_subtract = 330;
+        var start_date = new Date();
+        start_date.setDate(start_date.getDate() - days_to_subtract);
 
-    // First create as many divs as the number of elements in /data
-    let length_of_data = 2;
-    for (let i = 0 ; i < length_of_data; i++) {
-        var elemDiv = document.createElement('div');
-        elemDiv.setAttribute("id", "obsidian-log-" + i);
-        elemDiv.insertAdjacentText("afterbegin", i);
-        document.body.appendChild(elemDiv);
+
+        cal.paint({
+            itemSelector: '#obsidian-log-' + index,
+            domain: { type: 'month' , gutter: -10},
+            subDomain: { type: 'day', width: 20, height: 20 , radius: 6},
+            range: 12,
+            date: { start: start_date, highlight: [ new Date()], max: new Date() },
+            data: {
+                source: data_row['data'],
+                x: 'date',
+                y: 'value',
+            },
+            scale: {
+                color: {
+                    scheme: "turbo",
+                    // range: ['yellow', 'red'],
+                    // interpolate: 'hsl',
+                    type: 'linear',
+                    domain: [0, 100],
+                },
+            },
+        },[
+            [
+                Tooltip,
+                {
+                    text: function (date, value, dayjsDate) {
+                        return (
+                            (value ? value + '°C' : 'No data') + ' on ' + dayjsDate.format('LL')
+                        );
+                    },
+                },
+            ],
+            [
+                Legend,
+                {
+                    tickSize: 0,
+                    width: 150,
+                    label: 'Seattle max temperature °C',
+                },
+            ]
+        ]);
     }
 
-    // Help : https://cal-heatmap.com/docs/getting-started/installation
-    const cal = new CalHeatmap();
 
-    var days_to_subtract = 330;
-    var d = new Date();
-    d.setDate(d.getDate() - days_to_subtract);
+    // First create as many divs as the number of elements in /data
+    files = fetch("http://localhost:3000/all_files")
+        .then(res => res.json())
+        .then(out => {
+            let length_of_data = out.length;
+            for (let i = 0 ; i < length_of_data; i++) {
+                var elemDiv = document.createElement('div');
+                elemDiv.setAttribute("id", "obsidian-log-" + i);
+                elemDiv.insertAdjacentHTML("afterbegin", `<h3>${out[i]['filename']}</h3>`);
+                document.body.appendChild(elemDiv);
+                console.log('Checkout this result! ', out[i])
+                renderCal(out[i], i);
+            }
+        })
+        .catch(err => { throw err });
 
-
-    cal.paint({
-        itemSelector: '#obsidian-log-0',
-        domain: { type: 'year' },
-        subDomain: { type: 'day', width: 20, height: 20 , radius: 6},
-        range: 2,
-        date: { start: d, highlight: [ new Date()], max: new Date() },
-        data: {
-            source: '/dates',
-            x: 'date',
-            y: 'value',
-        },
-        scale: {
-            color: {
-                scheme: "turbo",
-                // range: ['yellow', 'red'],
-                // interpolate: 'hsl',
-                type: 'linear',
-                domain: [0, 100],
-            },
-        },
-    },[
-    [
-      Tooltip,
-      {
-        text: function (date, value, dayjsDate) {
-          return (
-            (value ? value + '°C' : 'No data') + ' on ' + dayjsDate.format('LL')
-          );
-        },
-      },
-    ],
-    [
-      Legend,
-      {
-        tickSize: 0,
-        width: 150,
-        label: 'Seattle max temperature °C',
-      },
-    ]
-  ]);
 </script>
 
