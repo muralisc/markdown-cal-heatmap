@@ -2,11 +2,13 @@
 
 Create cal-heatmap from markdown logs.
 
-markdown
-![markdown](example-markdown.jpeg)
+Convert a markdown like:
 
-heatmap
-![heatmap](example-heatmap.jpeg)
+<img src="example-markdown.jpeg" alt="example-markdown" width="400"/>
+
+To heatmap:
+
+<img src="example-heatmap.jpeg" alt="example-markdown" width="600"/>
 
 ```
 npm init -y
