@@ -1,0 +1,57 @@
+<head>
+
+
+
+<!-- dependency -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<!-- insall library -->
+<script src="https://unpkg.com/cal-heatmap/dist/cal-heatmap.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/cal-heatmap/dist/cal-heatmap.css">
+</head>
+
+<body>
+
+<h1>Obsidian </h1>
+<div id="example-sort"></div>
+</body>
+
+<script type="text/javascript">
+
+    // Help : https://cal-heatmap.com/docs/getting-started/installation
+
+    const cal = new CalHeatmap();
+
+    const custom_data = [
+        { date: '2024-03-21', value: 13 },
+        { date: '2024-03-22', value: 26 },
+    ];
+
+
+    var days_to_subtract = 330;
+    var d = new Date();
+    d.setDate(d.getDate() - days_to_subtract);
+
+
+    cal.paint({
+        itemSelector: '#example-sort',
+        domain: { type: 'month' },
+        subDomain: { type: 'day', width: 20, height: 20 },
+        range: 12,
+        date: { start: d, highlight: [ new Date()], max: new Date() },
+        data: {
+            source: custom_data,
+            x: 'date',
+            y: 'value',
+        },
+        scale: {
+            color: {
+                range: ['yellow', 'red'],
+                interpolate: 'hsl',
+                type: 'linear',
+                domain: [0, 30],
+            },
+        },
+    });
+</script>
+

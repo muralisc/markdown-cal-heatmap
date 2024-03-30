@@ -1,0 +1,24 @@
+{
+  "name": "markdown-cal-heatmap",
+  "version": "1.0.0",
+  "description": "``` npm init -y npm install unified unified-stream remark-parse remark-rehype rehype-stringify ```",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "luxon": "^3.4.4",
+    "minimist": "^1.2.8",
+    "rehype-stringify": "^10.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.0",
+    "unified": "^11.0.4",
+    "unified-stream": "^3.0.0"
+  }
+}
