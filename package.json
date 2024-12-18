@@ -15,11 +15,11 @@
     "fs": "^0.0.1-security",
     "luxon": "^3.4.4",
     "minimist": "^1.2.8",
+    "puppeteer": "^23.11.0",
     "rehype-stringify": "^10.0.0",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.0",
     "unified": "^11.0.4",
     "unified-stream": "^3.0.0"
-  },
-  "devDependencies": {}
+  }
 }

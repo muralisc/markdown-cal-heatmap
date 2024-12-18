@@ -28,7 +28,7 @@
     scale_objects = [
         { 
             color : {
-                scheme: "cool",
+                scheme: "Blues",
                 type: 'linear',
                 domain: [0, 100],
             }
@@ -41,9 +41,9 @@
             }
         },
         {
-            opacity: {
-                baseColor: '#ff0000',
-                type: 'linear',
+            color : {
+                range: ['white', 'blue'],
+                interpolate: 'rgb',
                 domain: [0, 100],
             }
         }
@@ -73,7 +73,7 @@
                 x: 'date',
                 y: 'value',
             },
-            scale: scale_objects[1], // use any index
+            scale: scale_objects[index % scale_objects.length], // use any index
         },[
             [
                 Tooltip,
@@ -105,7 +105,7 @@
             for (let i = 0 ; i < length_of_data; i++) {
                 var elemDiv = document.createElement('div');
                 elemDiv.setAttribute("id", "obsidian-log-" + i);
-                elemDiv.insertAdjacentHTML("afterbegin", `<h3>${out[i]['filename']}</h3>`);
+                elemDiv.insertAdjacentHTML("afterbegin", `<h3>${out[i]['calHeatmapSectionName']}</h3>`);
                 document.body.appendChild(elemDiv);
                 console.log('Checkout this result! ', out[i])
                 renderCal(out[i], i);
