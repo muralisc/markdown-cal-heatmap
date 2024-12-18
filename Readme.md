@@ -18,3 +18,7 @@ npm install unified unified-stream remark-parse remark-rehype rehype-stringify
 node index.js example.md
 
 ```
+
+```
+node index-daily.js -d ~/src/obsidian-vault2/Daily\ Notes -f cardio
+```

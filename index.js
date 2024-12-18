@@ -12,9 +12,6 @@ import {
 } from 'luxon'
 import express from 'express'
 
-var argv = minimist(process.argv.slice(2));
-var filenames = argv['_'];
-
 function getRandomIntInclusive(min, max) {
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
@@ -57,6 +54,10 @@ function getListOfTextAtRoot(ast_as_ref) {
     return listOfDateString;
 }
 
+// Use minimist to parse the arguments
+var argv = minimist(process.argv.slice(2));
+// Get all arguments as a list
+var filenames = argv['_'];
 let alldata = filenames.map((filename) => {
     console.log(`Processing file ${filename}`)
     var text = fs.readFileSync(filename).toString('utf-8');

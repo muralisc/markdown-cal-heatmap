@@ -25,6 +25,30 @@
 
 <script type="text/javascript">
 
+    scale_objects = [
+        { 
+            color : {
+                scheme: "cool",
+                type: 'linear',
+                domain: [0, 100],
+            }
+        },
+        { 
+            color : {
+                range: ['yellow', 'red'],
+                interpolate: 'rgb',
+                domain: [0, 100],
+            }
+        },
+        {
+            opacity: {
+                baseColor: '#ff0000',
+                type: 'linear',
+                domain: [0, 100],
+            }
+        }
+    ]
+
     function renderCal(data_row, index) {
         // Help : https://cal-heatmap.com/docs/getting-started/installation
         const cal = new CalHeatmap();
@@ -49,15 +73,7 @@
                 x: 'date',
                 y: 'value',
             },
-            scale: {
-                color: {
-                    scheme: "turbo",
-                    // range: ['yellow', 'red'],
-                    // interpolate: 'hsl',
-                    type: 'linear',
-                    domain: [0, 100],
-                },
-            },
+            scale: scale_objects[1], // use any index
         },[
             [
                 Tooltip,
