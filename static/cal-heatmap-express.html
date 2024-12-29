@@ -98,7 +98,7 @@
 
 
     // First create as many divs as the number of elements in /data
-    files = fetch("http://localhost:3000/all_files")
+    files = fetch("http://localhost:9123/all_files")
         .then(res => res.json())
         .then(out => {
             let length_of_data = out.length;

@@ -14,6 +14,7 @@ var argv = minimist(process.argv.slice(2));
 // Get all arguments as a list
 var directoryPath = argv['d'];
 var field_names_args = argv['f']
+var port_arg = argv['p']
 var field_name_list = []
 if (typeof field_names_args === "string") {
     field_name_list.push(field_names_args)
@@ -77,7 +78,7 @@ fs.readdir(directoryPath, function (err, files) {
 
 // Finally start the app !!
 const app = express()
-const port = 3000
+const port = port_arg
 app.get('/all_files', (req, res) => {
     res.send(alldata)
 })
