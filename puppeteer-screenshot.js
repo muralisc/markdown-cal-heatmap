@@ -24,9 +24,11 @@ var filename_arg = argv['f']
 
   await fs.promises.mkdir(`/var/tmp/cal-heatmap/`, { recursive: true })
 
+  let output_path = `/var/tmp/cal-heatmap/screenshot-${filename_arg}.jpg`
+  console.log(`Creating screenshot at ${output_path}`)
   // Capture screenshot
   await page.screenshot({
-    path: `/var/tmp/cal-heatmap/screenshot-${filename_arg}.jpg`,
+    path: output_path,
     fullPage: true
   });
 
