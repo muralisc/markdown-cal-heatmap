@@ -52,7 +52,7 @@
     function renderCal(data_row, index) {
         // Help : https://cal-heatmap.com/docs/getting-started/installation
         const cal = new CalHeatmap();
-        var days_to_subtract = 330;
+        var days_to_subtract = 390;
         var start_date = new Date();
         start_date.setDate(start_date.getDate() - days_to_subtract);
 
@@ -61,7 +61,7 @@
             itemSelector: '#obsidian-log-' + index,
             domain: { type: 'month' },
             subDomain: { type: 'day', width: 20, height: 20 , radius: 6},
-            range: 12,
+            range: 14,
             date: { 
                 start: start_date, 
                 highlight: [ new Date()], 
